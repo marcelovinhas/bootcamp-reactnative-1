@@ -1,29 +1,15 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
 
 import './config/ReactotronConfig';
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#f5fcff',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-});
-
-console.tron.warn('SALVEE');
+import { StatusBar } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import Routes from './routes'; // é melhor importar arquivos depois do reactotron
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text style={styles.welcome}>Welcome to React Native</Text>
-      <Text style={styles.welcome}>SALVE</Text>
-    </View>
+    <NavigationContainer>
+      <StatusBar backgroundColor="#7159c1" barStyle="light-content" />
+      <Routes />
+    </NavigationContainer>
   );
 }
