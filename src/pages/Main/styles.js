@@ -32,6 +32,8 @@ export const SubmitButton = styled(RectButton)`
   border-radius: 4px;
   margin-left: 10px; /* distância entre o botão e a caixa */
   padding: 0 12px; /* aumenta o tamanho do botão */
+  /* pega as props do componente, se loading for true opacidade de 70%, se não 100% */
+  opacity: ${(props) => (props.loading ? 0.7 : 1)};
 `;
 
 export const List = styled.FlatList.attrs({
