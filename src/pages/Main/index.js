@@ -1,5 +1,7 @@
+/* eslint-disable react/state-in-constructor */
 import React, { Component } from 'react';
-import { Keyboard } from 'react-native';
+import { Keyboard, ActivityIndicator } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import api from '../../services/api';
 
@@ -29,10 +31,32 @@ export default class Main extends Component {
   state = {
     newUser: '',
     users: [],
+    loading: false,
   };
+
+  async componentDidMount() {
+    const users = await AsyncStorage.getItem('users');
+
+    if (users) {
+      this.setState({ users: JSON.parse(users) });
+    }
+  }
+
+  async componentDidUpdate(_, prevState) {
+    const { users } = this.state;
+
+    if (prevState.users !== users) {
+      // ve se o estado antigo é igual ao atual, ve se mudou algo
+      AsyncStorage.setItem('users', JSON.stringify(users)); // como não tem nada depois não precisa do await
+    }
+  }
 
   handleAddUser = async () => {
     const { users, newUser } = this.state;
+
+    this.setState({
+      loading: true,
+    }); /* loading true antes de começar a fazer a chamada a api */
 
     const response = await api.get(`/users/${newUser}`);
 
@@ -47,13 +71,14 @@ export default class Main extends Component {
     this.setState({
       users: [...users, data], // pega todos os dados já armazenados com a variável data
       newUser: '', // apaga o que estava dentro da caixa
+      loading: false, // já carregou os dados da api
     });
 
     Keyboard.dismiss(); // para o teclado sumir depois que adicionar
   };
 
   render() {
-    const { users, newUser } = this.state;
+    const { users, newUser, loading } = this.state;
 
     return (
       <Container>
@@ -67,8 +92,14 @@ export default class Main extends Component {
             returnKeyType="send"
             onSubmitEditing={this.handleAddUser}
           />
-          <SubmitButton onPress={this.handleAddUser}>
-            <Icon name="add" size={20} color="#FFF" />
+          <SubmitButton loading={loading} onPress={this.handleAddUser}>
+            {/* se loading for true coloca ActivityIndicator, se não coloca o ícone */}
+            {/* ActivityIndicator é o sinal de carregamento que já vem estilizado por padrão */}
+            {loading ? (
+              <ActivityIndicator color="#FFF" />
+            ) : (
+              <Icon name="add" size={20} color="#FFF" />
+            )}
             {/* https://oblador.github.io/react-native-vector-icons/ */}
           </SubmitButton>
         </Form>
