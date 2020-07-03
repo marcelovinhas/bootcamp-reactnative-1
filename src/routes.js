@@ -17,7 +17,7 @@ export default function Routes() {
       <Stack.Screen
         name="Main"
         component={Main}
-        options={{ title: 'Usuários' }}
+        options={{ headerTitleAlign: 'center', title: 'Usuários' }}
       />
       <Stack.Screen name="User" component={User} />
     </Stack.Navigator>
