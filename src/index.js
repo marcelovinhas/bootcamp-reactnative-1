@@ -1,6 +1,6 @@
 import React from 'react';
 
-import './config/ReactotronConfig';
+import './config/ReactotronConfig'; // adb reverse tcp:9090 tcp:9090, console.tron.log
 import { StatusBar } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import Routes from './routes'; // é melhor importar arquivos depois do reactotron

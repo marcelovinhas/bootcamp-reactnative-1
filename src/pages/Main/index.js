@@ -1,5 +1,6 @@
 /* eslint-disable react/state-in-constructor */
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Keyboard, ActivityIndicator } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -28,6 +29,13 @@ import {
 // <Button title="Navigate to users" onPress={navigateToUsers} />
 
 export default class Main extends Component {
+  static propTypes = {
+    // valida as PropTypes do arquivo
+    navigation: PropTypes.shape({
+      navigate: PropTypes.func,
+    }).isRequired,
+  };
+
   state = {
     newUser: '',
     users: [],
@@ -55,8 +63,8 @@ export default class Main extends Component {
     const { users, newUser } = this.state;
 
     this.setState({
-      loading: true,
-    }); /* loading true antes de começar a fazer a chamada a api */
+      loading: true /* loading true antes de começar a fazer a chamada a api */,
+    });
 
     const response = await api.get(`/users/${newUser}`);
 
@@ -75,6 +83,12 @@ export default class Main extends Component {
     });
 
     Keyboard.dismiss(); // para o teclado sumir depois que adicionar
+  };
+
+  handleNavigate = (user) => {
+    const { navigation } = this.props;
+
+    navigation.navigate('User', { user }); // em aspas nome da tela, dentro das chaves o parâmetro
   };
 
   render() {
@@ -114,7 +128,7 @@ export default class Main extends Component {
               <Name>{item.name}</Name>
               <Bio>{item.bio}</Bio>
 
-              <ProfileButton onPress={() => {}}>
+              <ProfileButton onPress={() => this.handleNavigate(item)}>
                 <ProfileButtonText>Ver perfil</ProfileButtonText>
               </ProfileButton>
             </User>
