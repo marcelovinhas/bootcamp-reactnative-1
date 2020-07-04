@@ -19,7 +19,11 @@ export default function Routes() {
         component={Main}
         options={{ headerTitleAlign: 'center', title: 'Usuários' }}
       />
-      <Stack.Screen name="User" component={User} />
+      <Stack.Screen
+        name="User"
+        component={User}
+        options={({ route }) => ({ title: route.params.user.name })} // o título da tela recebe o nome do usuário
+      />
     </Stack.Navigator>
   );
 }
